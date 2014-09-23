@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-public class Container extends FrameLayout{
+public class Container extends RelativeLayout{
 	 ViewPager pager;
 	public Container(Context context, AttributeSet attrs) {
 		super(context, attrs);

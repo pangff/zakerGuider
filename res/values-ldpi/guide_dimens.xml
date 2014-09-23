@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   <dimen name="phone_width">160dp</dimen>
+   <dimen name="phone_height">280dp</dimen>
+
+   <dimen name="lookup_r_i">120dp</dimen>
+   <dimen name="lookup_r">130dp</dimen>
+   <dimen name="lookup_r_o">140dp</dimen>
+</resources>

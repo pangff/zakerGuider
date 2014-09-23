@@ -9,17 +9,6 @@ public class InnerViewpager extends ViewPager{
 	public InnerViewpager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
-	PathView pathView;
-	public void setPathView(PathView pathView){
-		this.pathView = pathView;
-	}
-	
-	public synchronized void bigShow(){
-		if(this.pathView!=null){
-			pathView.setBitMap(this.getDrawingCache());
-		}
-	}
-	
 	
 
 }

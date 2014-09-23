@@ -3,5 +3,6 @@
 
     <string name="app_name">zakerGuider</string>
     <string name="hello_world">Hello world!</string>
-
+<color name="dark">#FF222222</color>
+    <color name="light">#FFEEEEEE</color>
 </resources>

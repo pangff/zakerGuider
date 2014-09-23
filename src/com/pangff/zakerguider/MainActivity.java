@@ -1,33 +1,45 @@
 package com.pangff.zakerguider;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
 	ViewPager pager;
 	InnerViewpager innerPager;
 	Container container;
-	PathView pathView;
+	CircleImageView imageView;
 	boolean isStop = false;
 	boolean isFinsised = false;
+	ImageView coverView;
+	int animationViews[] = {R.id.cloudBig,R.id.cloudSmall};
+	static int innerDrawables[] = {R.drawable.lookup_1,R.drawable.lookup_2,R.drawable.lookup_3,R.drawable.lookup_4,R.drawable.lookup_5};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		
-		pathView = (PathView) findViewById(R.id.pathView);
-		
+		imageView = (CircleImageView) findViewById(R.id.circleView);
+		coverView = (ImageView) findViewById(R.id.coverView);
 		pager = (ViewPager) findViewById(R.id.pager);
-		pager.setAdapter(new BasePagerAdapter());
+		pager.setAdapter(new BgPagerAdapter(this));
 		
 		innerPager =  (InnerViewpager) findViewById(R.id.innerPager);
-		innerPager.setAdapter(new BasePagerAdapter());
-		innerPager.setDrawingCacheEnabled(true);
-		innerPager.setPathView(pathView);
+		innerPager.setAdapter(new PhonePagerAdapter());
+		innerPager.setDrawingCacheEnabled(false);
+		innerPager.setOffscreenPageLimit(3);
 		
 		container = (Container) findViewById(R.id.container);
 		container.setItems(pager);
@@ -77,20 +89,89 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
+	
+	
+	private void startCloudAnimation(final View view,int offset){
+		final TranslateAnimation ts = getAnimation();
+		ts.setDuration(12000);
+		ts.setInterpolator(new LinearInterpolator());
+		ts.setRepeatCount(-1);
+		if(offset>0){
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					view.startAnimation(ts);				
+				}
+			}, offset);
+		}else{
+			view.startAnimation(ts);		
+		}
+	}
+	
+	
+	public TranslateAnimation getAnimation(){
+		return new TranslateAnimation(Animation.RELATIVE_TO_PARENT,  
+                1.0f, Animation.RELATIVE_TO_PARENT, -0.2f,  
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,  
+                0.0f); 
+	}
+	
 
 	private synchronized void showBig(final int pager) {
-		new Handler().postDelayed(new Runnable() {
-
+//		new Handler().postDelayed(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				if(innerPager.getCurrentItem()==pager){
+//					innerPager.bigShow();
+//				}
+//			}
+//		}, 500);
+		AlphaAnimation an = new AlphaAnimation(1f,0f);
+		an.setDuration(250);
+		an.setAnimationListener(new AnimationListener() {
+			
 			@Override
-			public void run() {
+			public void onAnimationStart(Animation animation) {
+				
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				//imageView.setVisibility(View.GONE);
 				if(innerPager.getCurrentItem()==pager){
-					innerPager.invalidate();
-					innerPager.buildDrawingCache();
-					innerPager.bigShow();
+					//innerPager.bigShow();
+					imageView.setImageResource(innerDrawables[pager]);
 				}
 			}
-		}, 500);
-
+		});
+		imageView.startAnimation(an);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+//		for(int i=0;i<animationViews.length;i++){
+//			findViewById(animationViews[i]).clearAnimation();
+//		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+//		new Handler().post(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				for(int i=0;i<animationViews.length;i++){
+//					startCloudAnimation(findViewById(animationViews[i]),5000*i);
+//				}
+//			}
+//		});
 	}
 
 	private OnPageChangeListener mMainPagerListener = new OnPageChangeListener() {
