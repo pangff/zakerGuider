@@ -127,13 +127,16 @@ public class MainActivity extends Activity {
 //				}
 //			}
 //		}, 500);
-		AlphaAnimation an = new AlphaAnimation(1f,0f);
-		an.setDuration(250);
+		AlphaAnimation an = new AlphaAnimation(0.1f,1f);
+		an.setDuration(700);
 		an.setAnimationListener(new AnimationListener() {
 			
 			@Override
 			public void onAnimationStart(Animation animation) {
-				
+				if(innerPager.getCurrentItem()==pager){
+					//innerPager.bigShow();
+					imageView.setImageResource(innerDrawables[pager]);
+				}
 			}
 			
 			@Override
@@ -143,10 +146,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				//imageView.setVisibility(View.GONE);
-				if(innerPager.getCurrentItem()==pager){
-					//innerPager.bigShow();
-					imageView.setImageResource(innerDrawables[pager]);
-				}
+				
 			}
 		});
 		imageView.startAnimation(an);
